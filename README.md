@@ -5,7 +5,7 @@ Modelos Creados:
 * Vectorial
 Pendientes:  
 * Booleano
-* ???
+* ???  
 Para ejecutar el código debe tener instalado python, uvicorn, nltk y numpy
 ```
 $ uvicorn main:app --reload
