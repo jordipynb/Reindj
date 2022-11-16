@@ -6,6 +6,7 @@ Modelos Creados:
 Pendientes:  
 * Booleano
 * ???  
+
 Para ejecutar el código debe tener instalado python, uvicorn, nltk y numpy
 ```
-$ uvicorn main:app --reload
+> uvicorn main:app --reload
