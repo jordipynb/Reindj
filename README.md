@@ -5,8 +5,8 @@ Se deben crear 3 modelos de recuperación de información en función de 3 colec
 | Modelos | Colecciones | Finalizado |
 |---------|-------------|------------|
 | Vectorial | Cranfield |  Listo     |
-| Booleano | TREC-covid | Pendiente  |
-| Vectorial Generalizado | awavani | Pendiente|  
+| Booleano | TREC-Covid | Pendiente  |
+| Vectorial Generalizado | Vaswani | Pendiente|  
 
 Para ejecutar el código debe tener instalado python, uvicorn, nltk y numpy
 ```
