@@ -6,8 +6,8 @@ Se deben crear 3 modelos de recuperación de información en función de 3 colec
 |------------------------|------------|-------------|------------|
 | Vectorial              | Listo      | Cranfield   | Listo      |
 | Booleano               | Pendiente  | TREC-Covid  | Pendiente  |
-| Indexación de Semántica| Listo      | Vaswani     | Listo      |  
-| Latente                |            |             |            |
+| Indexación de Semántica Latente| Listo      | Vaswani     | Listo      |  
+                                      
 
 Para ejecutar el código debe tener instalado python, uvicorn, nltk y numpy
 ```
