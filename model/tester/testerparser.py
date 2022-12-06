@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from collections import defaultdict
-
+import re
 class TesterParser(ABC):
     __type__ = "default"
 
@@ -17,10 +17,27 @@ class TesterParser(ABC):
 class CranfieldTesterParser(TesterParser):
     __type__ = "cranfield"
 
-    def __call__(self, qry_doc:list[str]) -> dict[str,list[str]]:
+    def __call__(self, path:str) -> dict[str,list[str]]:
+        with open(path,"r", encoding='utf8') as qry_doc_path:qry_doc = qry_doc_path.readlines()
         result:defaultdict[str,list] = defaultdict(list)
         for rel in qry_doc:
             rel_splitted = rel.split()
             qry, doc = rel_splitted[0], rel_splitted[1]
             result[qry].append(doc)
+        return result
+
+class VaswaniTesterParser(TesterParser):
+    __type__ = "vaswani"
+
+    def __call__(self, path:str) -> dict[str,list[str]]:
+        with open(path,"r", encoding='utf8') as qry_doc_path:qry_doc=qry_doc_path.read()
+        querys=qry_doc.split('/')
+        querys.pop(len(querys)-1)
+        result:defaultdict[str,list[str]]=defaultdict(lambda:[])
+        querys[0]="\n"+ querys[0]
+        for item in querys:   
+            temp=item.split("\n",maxsplit=2)
+            qry=temp[1]
+            docs=re.split(' ',temp[2].replace("\n"," ").replace("  "," "))
+            result[qry]=list(filter(lambda x : not(x =='') and int(x) <=2,docs))
         return result

@@ -13,13 +13,13 @@ class Query:
         self.__typeqry__ = Qrydb.search_qry_type(self.__typedb__)
         self.__typemodel__ = self.__framework__.__typemodel__
         self.__path__ = Configuration().qry_path(self.__typedb__)
-
+        self.__T__=self.__framework__.__T__
     def __get_queries__(self) -> list[Qrydb]:
         if not self.__path__.exists() or not self.__path__.is_file(): raise Exception("Queries Path is not exist")
         queries = ""
         with open(self.__path__, "r", encoding='utf8') as queriespath: queries = queriespath.read()
         return QryParser.search_qry_parser_type(self.__typedb__)(queries)
 
-    def __call__(self, text:str) -> tuple[Qrydb, list[float]]:
+    def __call__(self, text:str) ->  list[float]:
         qry:Qrydb = self.__typeqry__(0,text)
-        return QryIndexer.search_qry_indexer_type(self.__typemodel__)(qry,self.__terms__,self.__idf__)
+        return QryIndexer.search_qry_indexer_type(self.__typemodel__)(qry,self.__terms__,self.__T__,self.__idf__)

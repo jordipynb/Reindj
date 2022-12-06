@@ -7,11 +7,12 @@ from . import Qrydb
 import numpy as np
 import re
 
+
 class QryIndexer(ABC):
     __type__ = "default"
     
     @abstractmethod
-    def __call__(self, qry:Qrydb, terms:list[str], idf:list[float]=None) -> np.ndarray:pass
+    def __call__(self, qry:Qrydb, terms:list[str], vector:list[float]=None) -> np.ndarray:pass
 
     @classmethod
     def search_qry_indexer_type(self, _type:str):
@@ -23,7 +24,7 @@ class QryIndexer(ABC):
 class VectorQryIndexer(QryIndexer):
     __type__ = "vector"
     
-    def __call__(self, qry:Qrydb, terms:list[str], idf:list[float]=None) -> np.ndarray:
+    def __call__(self, qry:Qrydb, terms:list[str], S,idf:list[float]=None) -> np.ndarray:
         if idf is None or len(idf) == 0: raise Exception("idf is necesary and is Empty")
         text = qry.text
         dict_terms, max_frequency = self.__extract_terms__(text)    
@@ -63,3 +64,35 @@ class VectorQryIndexer(QryIndexer):
                 tf_iq = value/max_frequency
                 weight[index] = (0.5 + 0.5 * tf_iq) * idf_value
         return weight
+
+class Latent_Semantic_Indexer(QryIndexer):
+    __type__ = "latent_semantic"
+    
+    def __call__(self, qry:Qrydb,terms:list[str], T:np.array,S:np.array,) -> np.ndarray:
+        text = qry.text    
+        q= self.__extract_terms__(text,terms)
+        t=np.dot(np.linalg.inv(S),T.transpose())
+        return np.dot(t,q)
+
+    def __extract_terms__(self, text:str, terms:list[str]) -> np.ndarray:
+        separators = ("\n", "|", "\"", " ", "\\", "/", "{", "}", "[", "]", "(", ")","`","^","&", 
+                      "-","+","*","!","?",".",",",";",":","\'","#","$","@","%","~","<",">","=")
+        is_relevant = lambda pos: pos == 'NOUN' or pos == 'ADJ' or pos == 'VERB'
+        stop_words:set[str] = set(stopwords.words('english'))
+        vector:np.ndarray= np.zeros(len(terms))
+        terms_pos:dict[str,str] = defaultdict(str)
+        regular_exp = '|'.join(map(re.escape, separators))
+        text = re.split(regular_exp,text)
+        tokenize = list(filter(("").__ne__, text))
+        for token in tokenize:
+            if not token in stop_words:
+                word_lemmatize = WordNetLemmatizer().lemmatize(token)
+                lemmatize = [word_lemmatize]
+                pos = terms_pos[word_lemmatize]
+                if pos == "":
+                    word,pos = pos_tag(lemmatize, tagset='universal')[0]
+                    terms_pos[word] = pos
+                    if is_relevant(pos) and word in terms: 
+                        vector[terms.index(word)]=1
+        return vector
+

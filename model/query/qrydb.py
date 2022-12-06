@@ -35,3 +35,16 @@ class CranfieldQry(Qrydb):
         if isinstance(other, CranfieldQry):
             return self.id == other.id
         raise TypeError("Other must be a Cranfield Query")
+
+class VaswaniQry(Qrydb):
+    __type__ = "vaswani"
+
+    def __init__(self, id:int, text:str):
+        Qrydb.__init__(self, id, text.lower())
+
+    def __call__(self): pass
+
+    def __eq__(self, other):
+        if isinstance(other, VaswaniQry):
+            return self.id == other.id
+        raise TypeError("Other must be a Vaswani Query")

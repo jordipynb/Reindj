@@ -5,8 +5,14 @@
             "qry": "db/cranfield/cran.qry",
             "rel": "db/cranfield/cranqrel",
             "__type__": "cranfield"
+        },
+        "vaswani":{
+            "path":"db/vaswani/doc-text",
+            "qry": "db/vaswani/query-text",
+            "rel": "db/vaswani/rlv-ass",
+            "__type__": "vaswani" 
         }
     },
     "top": 500,
-    "umbral": 0.23
+    "umbral": 0.8
 }

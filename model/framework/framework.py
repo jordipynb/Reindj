@@ -11,7 +11,7 @@ class Framework:
         self.__typemodel__ = typemodel
         doc = self.__documents__()
         self.__corpus__ = Corpus(doc)
-        self.__weight__,self.__idf__,self.terms = Indexer.search_indexer_type(self.__typemodel__)(self.__corpus__.bodies)
+        self.__weight__,self.__idf__,self.terms,self.__T__ = Indexer.search_indexer_type(self.__typemodel__)(self.__corpus__.bodies)
 
     def __documents__(self) -> list[Document]:        
         if not self.__path__.exists() or not self.__path__.is_file(): raise Exception("Corpus Path is not exist")
