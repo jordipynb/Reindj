@@ -3,9 +3,8 @@ from abc import ABC, abstractmethod
 class Document(ABC):
     __type__ = "default"
 
-    def __init__(self, id:str, title:str, text:str):
+    def __init__(self, id:str, text:str):
         self.id = id
-        self.title = title
         self.text = text
 
     @abstractmethod
@@ -24,8 +23,21 @@ class CranfieldDocument(Document):
     __type__ = "cranfield"
 
     def __init__(self, id:str, title:str, text:str, author:str, editorial:str):
-        Document.__init__(self, id, title.lower(), text.lower())
+        Document.__init__(self, id, text.lower())
         self.author = author.lower()
+        self.title = title.lower()
         self.editorial = editorial.lower()
+
+    def __call__(self): pass
+
+
+class TrecCovidDocument(Document):
+    __type__ = "trec-covid"
+
+    def __int__(self, id: str, title: str, text: str, metadata: dict, pubmed_id: str):
+        Document.__init__(self, id, text.lower())
+        self.title = title
+        self.metadata = metadata
+        self.pubmed_id = pubmed_id
 
     def __call__(self): pass

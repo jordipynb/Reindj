@@ -14,7 +14,7 @@ class Framework:
         self.__weight__,self.__idf__,self.terms = Indexer.search_indexer_type(self.__typemodel__)(self.__corpus__.bodies)
 
     def __documents__(self) -> list[Document]:        
-        if not self.__path__.exists() or not self.__path__.is_file(): raise Exception("Corpus Path is not exist")
+        if not self.__path__.exists() or not self.__path__.is_file(): raise Exception("Corpus Path does not exist")
         collection = ""
         with open(self.__path__, "r", encoding='utf8') as collpath: collection = collpath.read()
         return Parser.search_parser_type(self.__typedb__)(collection)

@@ -1,4 +1,6 @@
 import re
+import json
+from config import Configuration
 from typing import Generator
 from . import Document
 from abc import ABC, abstractmethod
@@ -7,7 +9,7 @@ class Parser(ABC):
     __type__ = "default"
 
     @abstractmethod
-    def __call__(self, text:str) -> list[Document]:pass
+    def __call__(self, text: str) -> list[Document]: pass
 
     @classmethod
     def search_parser_type(self, _type:str):
@@ -15,12 +17,13 @@ class Parser(ABC):
         for _cls in self.__subclasses__(): cls[_cls.__type__] = _cls
         if not _type in cls: raise Exception("Unknown Parser Type")
         return cls[_type]()
-    
+
+
 class CranfieldParser(Parser):
     __type__ = "cranfield"
 
     def __init__(self):
-        self.__typedoc__:type[Document] = Document.search_document_type(CranfieldParser.__type__)
+        self.__typedoc__: type[Document] = Document.search_document_type(CranfieldParser.__type__)
         self.__match_Title__ = re.compile('\.T')
         self.__match_Author__ = re.compile('\.A')
         self.__match_Editorial__ = re.compile('\.B')
@@ -45,3 +48,20 @@ class CranfieldParser(Parser):
             editorial = editorial.replace("\n", " ")[1:-1]
             textdoc = textdoc.replace("\n", " ")
             yield title, textdoc, author, editorial
+
+class TrecCovidParser(Parser):
+
+    def __int__(self):
+        self.__typedoc__: type[Document] = Document.search_document_type(TrecCovidParser.__type__)
+
+    def __call__(self, text:str) -> list[Document]:
+        list_docs:list[Document] = []
+        db_path = Configuration.db_path(_type="trec-covid")
+
+        with open(db_path, 'r') as json_file:
+            json_list = list(json_file)
+
+        for json_lines in json_list:
+            doc = json.loads(json_lines)
+            list_docs.append(self.__typedoc__(doc['_id'],doc['title'],doc['text'],doc['metadata'],doc['pubmed_id']))
+

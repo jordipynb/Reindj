@@ -1,12 +1,18 @@
 {
-    "db": {
-        "cranfield":{
-            "path":"db/cranfield/cran.all.1400",
-            "qry": "db/cranfield/cran.qry",
-            "rel": "db/cranfield/cranqrel",
-            "__type__": "cranfield"
-        }
+  "db": {
+    "cranfield": {
+      "path": "db/cranfield/cran.all.1400",
+      "qry": "db/cranfield/cran.qry",
+      "rel": "db/cranfield/cranqrel",
+      "__type__": "cranfield"
     },
-    "top": 500,
-    "umbral": 0.23
+    "trec-covid": {
+        "path": "db/trec-covid/corpus.jsonl",
+        "qry": "db/trec-covid/queries.jsonl",
+        "rel": "db/trec-covid/qrels/test.tsv",
+        "__type__": "trec-covid"
+    }
+  },
+  "top": 500,
+  "umbral": 0.23
 }
