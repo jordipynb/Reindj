@@ -3,8 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from reindj import Reindj
 
 app = FastAPI()
-
-system = Reindj("cranfield", "vector")
+system = Reindj("cranfield","latent_semantic")
 
 # NEW
 app.add_middleware(
@@ -38,3 +37,6 @@ def search(qry: str):
 @app.get("/terms")
 def terms():
     return system.framework.terms
+
+
+search("hola")

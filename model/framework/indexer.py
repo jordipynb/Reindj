@@ -6,49 +6,39 @@ from collections import defaultdict
 from ..tools import defaultdictint
 import numpy as np
 import re
+import math
 import nltk
 from nltk import word_tokenize
 from sklearn.feature_extraction.text import TfidfVectorizer
 
+#region Download resource before use
+#try:
+#    data.find('tokenizers/punkt')
+#except LookupError:
+#    download('punkt')
 
-# import ssl
-#
-# try:
-#     _create_unverified_https_context = ssl._create_unverified_context
-# except AttributeError:
-#     pass
-# else:
-#     ssl._create_default_https_context = _create_unverified_https_context
-#
-# # nltk.download()
-# ### region Download resource before use
-# # try:
-# #    data.find('tokenizers/punkt')
-# # except LookupError:
-# nltk.download('punkt')
-#
-# # try:
-# #    data.find("corpora/omw-1.4")
-# # except LookupError:
-# nltk.download('omw-1.4')
-#
-# # try:
-# #    data.find("corpora/wordnet")
-# # except LookupError:
-# nltk.download("wordnet")
-#
-# # try:
-# #    data.find("taggers/averaged_perceptron_tagger")
-# # except LookupError:
-# nltk.download('averaged_perceptron_tagger')
-#
-# # try:
-# #    data.find("corpora/stopwords")
-# # except LookupError:
-# nltk.download("stopwords")
-# ### endregion
-#
-# nltk.download('universal_tagset')
+#try:
+#    data.find("corpora/omw-1.4")
+#except LookupError:
+#    download('omw-1.4')
+
+#try:
+#    data.find("corpora/wordnet")
+#except LookupError:
+#    download("wordnet")
+
+#try:
+#    data.find("taggers/averaged_perceptron_tagger")
+#except LookupError:
+#    download('averaged_perceptron_tagger')
+
+#try:
+#    data.find("corpora/stopwords")
+#except LookupError:
+#    download("stopwords")
+#endregion
+
+#download('universal_tagset')
 
 class Indexer(ABC):
     __type__ = "default"
@@ -112,6 +102,62 @@ class VectorIndexer(Indexer):
                 tf_ij = count / max_frequency[j]
                 weight[j][i] = idf[i] * tf_ij
         return weight, idf, list(dict_terms.keys())
+
+
+class Latent_Semantic_Indexer(Indexer):
+    __type__ = "latent_semantic"
+
+    def __call__(self, docs_bodies: list[str]) -> tuple[np.ndarray, np.ndarray, list[str]]:
+        tf, tf_2, d = self.__extract_terms__(docs_bodies)
+        T, S, DT = self.__get_SVD__(tf, tf_2, d, 150)
+        docs = self.__get_docs__(DT)
+        return docs, S, list(tf.keys()), T
+
+    def __extract_terms__(self, docs_bodies: list[str]) -> tuple[dict[str, dict[int, int]], np.ndarray]:
+        separators = ("\n", "|", "\"", " ", "\\", "/", "{", "}", "[", "]", "(", ")", "`", "^", "&",
+                      "-", "+", "*", "!", "?", ".", ",", ";", ":", "\'", "#", "$", "@", "%", "~", "<", ">", "=")
+        is_relevant = lambda pos: pos == 'NOUN' or pos == 'ADJ' or pos == 'VERB'
+        stop_words: set[str] = set(stopwords.words('english'))
+        tf: dict[str, np.ndarray] = defaultdict(lambda: np.zeros(len(docs_bodies)))
+        tf_2: dict[str, int] = defaultdict(int)
+        terms_pos: dict[str, str] = defaultdict(str)
+        for i, doc_text in enumerate(docs_bodies):
+            active_terms = []
+            regular_exp = '|'.join(map(re.escape, separators))
+            doc_text = re.split(regular_exp, doc_text)
+            tokenize = list(filter(("").__ne__, doc_text))
+            for token in tokenize:
+                if not token in stop_words:
+                    word_lemmatize = WordNetLemmatizer().lemmatize(token)
+                    lemmatize = [word_lemmatize]
+                    pos = terms_pos[word_lemmatize]
+                    if pos == "":
+                        word, pos = pos_tag(lemmatize, tagset='universal')[0]
+                        terms_pos[word] = pos
+                    if is_relevant(pos):
+                        tf[word_lemmatize][i] = tf[word_lemmatize][i] + 1
+                        active_terms.append(word_lemmatize)
+            active_terms = list(set(active_terms))
+            for term in active_terms:
+                tf_2[term] += tf[term][i] ** 2
+        return tf, tf_2, len(docs_bodies)
+
+    def __get_SVD__(self, tf: dict[str, np.ndarray], tf_2: dict[str, int], d: int, k: int) -> tuple[
+        np.ndarray, np.ndarray, np.ndarray]:
+        t = len(tf.keys())
+        A = np.ndarray(shape=(t, d))
+        for i, term in enumerate(tf):
+            for j in range(d):
+                A[i, j] = tf[term][j] / math.sqrt(tf_2[term])
+        T, S, DT = np.linalg.svd(A)
+        T2 = T[0:T.shape[0], 0:k]
+        S2 = np.diag(S[0:k])
+        DT2 = DT[0:k, 0:DT.shape[1]]
+        return T2, S2, DT2
+
+    def __get_docs__(self, DT2: np.array):
+
+        return [DT2[:, i] for i in range(DT2.shape[1])]
 
 
 class BooleanIndexer(Indexer):

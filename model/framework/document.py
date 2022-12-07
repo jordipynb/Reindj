@@ -25,7 +25,6 @@ class CranfieldDocument(Document):
     def __init__(self, id:str, title:str, text:str, author:str, editorial:str):
         Document.__init__(self, id, text.lower())
         self.author = author.lower()
-        self.title = title.lower()
         self.editorial = editorial.lower()
 
     def __call__(self): pass
@@ -39,5 +38,14 @@ class TrecCovidDocument(Document):
         self.title = title
         self.metadata = metadata
         self.pubmed_id = pubmed_id
+
+    def __call__(self): pass
+
+
+class VaswaniDocument(Document):
+    __type__ = "vaswani"
+
+    def __init__(self, id:str, text:str):
+        Document.__init__(self, id, text.lower())
 
     def __call__(self): pass

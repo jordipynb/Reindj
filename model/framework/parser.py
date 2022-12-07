@@ -5,6 +5,7 @@ from typing import Generator
 from . import Document
 from abc import ABC, abstractmethod
 
+
 class Parser(ABC):
     __type__ = "default"
 
@@ -65,3 +66,25 @@ class TrecCovidParser(Parser):
             doc = json.loads(json_lines)
             list_docs.append(self.__typedoc__(doc['_id'],doc['title'],doc['text'],doc['metadata'],doc['pubmed_id']))
 
+
+class VaswaniParser(Parser):
+    __type__ = "vaswani"
+
+    def __init__(self):
+        self.__typedoc__:type[Document] = Document.search_document_type(VaswaniParser.__type__)
+
+    def __call__(self, text:str) -> list[Document]:
+        tuple_docs = self.__tokenize_docs__(text)
+        list_docs:list[Document] = []
+        for i,docs in enumerate(tuple_docs):
+            list_docs.append(self.__typedoc__(str(i+1),docs))
+        return list_docs
+
+    def __tokenize_docs__(self, text:str) -> Generator[tuple[str,str,str,str],None,None]:
+        docs_splitted = re.split(f"/", text)
+        first=re.split(f"\n",docs_splitted.pop(0),maxsplit=1)
+        yield first[1]
+        docs_splitted.pop(len(docs_splitted )-1)
+        for doc in docs_splitted:
+            current=re.split(f"\n",doc,maxsplit=2)
+            yield current[2].replace("\n"," ")

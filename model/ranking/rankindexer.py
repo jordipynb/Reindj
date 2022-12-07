@@ -34,3 +34,19 @@ class VectorRankIndexer(RankIndexer):
         if len(top_umbral) == 0: top_umbral.append(top_sim[0])
         top_umbral = list(map(lambda topumbral:topumbral[0],top_umbral))
         return top_umbral
+
+    
+class Latent_Semantic_Rank_Indexer(RankIndexer):
+    __type__="latent_semantic"
+    def __call__(self,top:int,umbral:float,w_docterms:np.ndarray,w_queryterms:list[float],corpus:Corpus) -> list[Document]:
+        cos = cosine_similarity(w_docterms, w_queryterms.reshape(1, -1))
+        doc_sim = []
+        for i in range(len(corpus)):
+            doc = corpus[i]
+            sim = cos[i]
+            doc_sim.append((doc, sim))
+        top_sim = nlargest(top, doc_sim, key=lambda docsim:docsim[1])
+        top_umbral = list(filter(lambda topsim:topsim[1]>umbral,top_sim))
+        if len(top_umbral) == 0: top_umbral.append(top_sim[0])
+        top_umbral = list(map(lambda topumbral:topumbral[0],top_umbral))
+        return top_umbral
