@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from reindj import Reindj
 
 app = FastAPI()
-system = Reindj("cranfield","latent_semantic")
+system = Reindj("cranfield", "latent_semantic", "trec-covid")
 
 # NEW
 app.add_middleware(

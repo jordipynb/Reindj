@@ -19,6 +19,7 @@ class Document(ABC):
             raise Exception("Unknown Document Type")
         return cls[_type]
 
+
 class CranfieldDocument(Document):
     __type__ = "cranfield"
 

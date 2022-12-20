@@ -3,7 +3,7 @@ from pathlib import Path
 
 class Configuration:
     def __init__(self):
-        self.__dict__ = load(open(f"./config.json","r"))
+        self.__dict__ = load(open(f"./config.json", "r"))
 
     def db_path(self, _type:str) -> Path:
         return Path(self.db[_type]["path"])

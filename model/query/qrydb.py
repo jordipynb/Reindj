@@ -38,7 +38,7 @@ class CranfieldQry(Qrydb):
     def __eq__(self, other):
         if isinstance(other, CranfieldQry):
             return self.id == other.id
-        raise TypeError("Other must be a Cranfield Query")
+        raise TypeError("The \'other\' argument must be a Cranfield Query")
 
 
 class TrecCovidQry(Qrydb):
@@ -53,7 +53,7 @@ class TrecCovidQry(Qrydb):
     def __eq__(self, other):
         if isinstance(other, TrecCovidQry):
             return self.id == other.id
-        raise TypeError("Other must be a Trec-COVID Query")
+    raise TypeError("The \'other\' argument must be a trec-COVID Query")
 
 
 class VaswaniQry(Qrydb):
@@ -67,4 +67,4 @@ class VaswaniQry(Qrydb):
     def __eq__(self, other):
         if isinstance(other, VaswaniQry):
             return self.id == other.id
-        raise TypeError("Other must be a Vaswani Query")
+        raise TypeError("The \'other\' argument must be a Vaswani Query")

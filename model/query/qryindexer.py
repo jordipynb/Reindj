@@ -41,7 +41,7 @@ class VectorQryIndexer(QryIndexer):
         terms_pos: dict[str, str] = defaultdict(str)
         regular_exp = '|'.join(map(re.escape, separators))
         text = re.split(regular_exp, text)
-        tokenize = list(filter(("").__ne__, text))
+        tokenize = list(filter("".__ne__, text))
         for token in tokenize:
             # if len(token) < 3: continue
             if not token in stop_words:

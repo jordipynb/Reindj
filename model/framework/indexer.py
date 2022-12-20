@@ -7,38 +7,37 @@ from ..tools import defaultdictint
 import numpy as np
 import re
 import math
-import nltk
-from nltk import word_tokenize
 from sklearn.feature_extraction.text import TfidfVectorizer
 
-#region Download resource before use
-#try:
+
+# region Download resource before use
+# try:
 #    data.find('tokenizers/punkt')
-#except LookupError:
+# except LookupError:
 #    download('punkt')
 
-#try:
+# try:
 #    data.find("corpora/omw-1.4")
-#except LookupError:
+# except LookupError:
 #    download('omw-1.4')
 
-#try:
+# try:
 #    data.find("corpora/wordnet")
-#except LookupError:
+# except LookupError:
 #    download("wordnet")
 
-#try:
+# try:
 #    data.find("taggers/averaged_perceptron_tagger")
-#except LookupError:
+# except LookupError:
 #    download('averaged_perceptron_tagger')
 
-#try:
+# try:
 #    data.find("corpora/stopwords")
-#except LookupError:
+# except LookupError:
 #    download("stopwords")
-#endregion
+# endregion
 
-#download('universal_tagset')
+# download('universal_tagset')
 
 class Indexer(ABC):
     __type__ = "default"
@@ -76,7 +75,7 @@ class VectorIndexer(Indexer):
             max_temp = 0
             regular_exp = '|'.join(map(re.escape, separators))
             doc_text = re.split(regular_exp, doc_text)
-            tokenize = list(filter(("").__ne__, doc_text))
+            tokenize = list(filter("".__ne__, doc_text))
             for token in tokenize:
                 # if len(token) < 3: continue
                 if not token in stop_words:
@@ -125,7 +124,7 @@ class Latent_Semantic_Indexer(Indexer):
             active_terms = []
             regular_exp = '|'.join(map(re.escape, separators))
             doc_text = re.split(regular_exp, doc_text)
-            tokenize = list(filter(("").__ne__, doc_text))
+            tokenize = list(filter("".__ne__, doc_text))
             for token in tokenize:
                 if not token in stop_words:
                     word_lemmatize = WordNetLemmatizer().lemmatize(token)
@@ -163,5 +162,30 @@ class Latent_Semantic_Indexer(Indexer):
 class BooleanIndexer(Indexer):
     __type__ = "boolean"
 
-    def __call__(self):
-        pass
+    def __call__(self, docs_bodies: list[str]) -> tuple[np.ndarray, np.ndarray, list[str]]:
+        dict_terms, max_frequency = self.__extract_terms__(docs_bodies)
+
+    def __extract_terms__(self, docs_bodies: list[str]) -> tuple[dict[str, dict[int, int]], np.ndarray]:
+        separators = ("\n", "|", "\"", " ", "\\", "/", "{", "}", "[", "]", "(", ")", "`", "^", "&",
+                      "-", "+", "*", "!", "?", ".", ",", ";", ":", "\'", "#", "$", "@", "%", "~", "<", ">", "=")
+        is_relevant = lambda pos: pos == 'NOUN' or pos == 'ADJ' or pos == 'VERB'
+        stop_words: set[str] = set(stopwords.words('english'))
+        dict_terms: dict[str, np.ndarray] = defaultdict(lambda: np.zeros(len(docs_bodies), dtype=int))
+        terms_pos: dict[str, str] = defaultdict(str)
+        for i, doc_text in enumerate(docs_bodies):
+            regular_exp = '|'.join(map(re.escape, separators))
+            doc_text = re.split(regular_exp, doc_text)
+            tokenize = list(filter("".__ne__, doc_text))
+            for token in tokenize:
+                if not token in stop_words:
+                    word_lemmatize = WordNetLemmatizer().lemmatize(token)
+                    lemmatize = [word_lemmatize]
+                    pos = terms_pos[word_lemmatize]
+                    if pos == "":
+                        word, pos = pos_tag(lemmatize, tagset='universal')[0]
+                        terms_pos[word] = pos
+                    if is_relevant(pos):
+                        cc = dict_terms[word]
+                        cc[i] = 1
+                        dict_terms[word] = cc
+        return dict_terms

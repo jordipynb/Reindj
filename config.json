@@ -9,7 +9,7 @@
         "trec-covid": {
             "path": "db/trec-covid/corpus.jsonl",
             "qry": "db/trec-covid/queries.jsonl",
-            "rel": "db/trec-covid/qrels/test.tsv",
+            "rel": "db/trec-covid/test.tsv",
             "__type__": "trec-covid"
         },
         "vaswani": {
