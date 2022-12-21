@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from reindj import Reindj
 
 app = FastAPI()
-system = Reindj("cranfield", "boolean")
+system = Reindj("trec-covid", "boolean")
 
 # NEW
 app.add_middleware(
@@ -38,5 +38,4 @@ def search(qry: str):
 def terms():
     return system.framework.terms
 
-
-search("what similarity laws must be obeyed when constructing aeroelastic models of heated high speed aircraft")
+# evaluate()

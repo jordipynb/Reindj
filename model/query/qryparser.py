@@ -71,9 +71,10 @@ class TrecCovidQryParser(QryParser):
         self.__typedoc__ = Qrydb.search_qry_type(TrecCovidQryParser.__type__)
 
     def __call__(self, text: str) -> list[Qrydb]:
-        qry_dict = json.loads(text)
+        with open('db/trec-covid/queries.jsonl') as queries:
+            qries = list(queries)
         qry_list: list[Qrydb] = []
-        qry_dict.pop(0)
-        for qry in qry_dict:
-            qry_list.append(self.__typedoc__(int(qry['id']), qry['text'], qry['metadata']))
-        return qry_list
+        for qry in qries:
+            qry_dict = json.loads(qry)
+            qry_list.append(self.__typedoc__(int(qry_dict['_id']), qry_dict['text'], qry_dict['metadata']))
+            return qry_list

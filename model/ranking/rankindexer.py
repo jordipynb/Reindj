@@ -75,8 +75,8 @@ class BooleanRankIndexer(RankIndexer):
 
     def __verify_docs__(self, terms: list[np.ndarray], corpus: Corpus):
         docs: list[Document] = []
-        for i in range (0, len(corpus)):
-            for j, term in terms:
+        for i in range(0, len(corpus)):
+            for j, term in enumerate(terms):
                 if term[i] == 0:
                     break
                 if term[i] == 1 and j == len(terms) - 1:
@@ -86,7 +86,7 @@ class BooleanRankIndexer(RankIndexer):
     def __is_equal__(self, array1: np.ndarray, array2: np.ndarray):
         if len(array1) != len(array2):
             return False
-        for i in array1:
+        for i in range(0, len(array1)):
             if array1[i] != array2[i]:
                 return False
         return True

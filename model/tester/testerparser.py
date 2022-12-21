@@ -34,9 +34,11 @@ class CranfieldTesterParser(TesterParser):
     class TrecCovidTesterParser(TesterParser):
         __type__ = "trec-covid"
 
-        def __call__(self, qry_doc: list[str], docs =None) -> dict[str, list[str]]:
+        def __call__(self, path: str, docs=None) -> dict[str, list[str]]:
             result: defaultdict[str, list] = defaultdict(list)
-            qry_doc.pop(0)
+            with open(path, 'r') as qries:
+                qry_doc = list(qries)
+            qries.close()
             for rel in qry_doc:
                 rel_split = rel.split()
                 qry, doc = rel_split[0], rel_split[1]
@@ -57,5 +59,7 @@ class VaswaniTesterParser(TesterParser):
             temp = item.split("\n", maxsplit=2)
             qry = temp[1]
             docs = re.split(' ', temp[2].replace("\n", " ").replace("  ", " "))
-            result[qry] = list(filter(lambda x: not (x == ''), docs))
+            rel = list(filter(lambda x: not (x == '') and int(x) < 2000, docs))
+            if len(rel) > 0:
+                result[qry] = rel
         return result

@@ -93,4 +93,5 @@ class VaswaniParser(Parser):
         docs_splitted.pop(len(docs_splitted) - 1)
         for doc in docs_splitted:
             current = re.split(f"\n", doc, maxsplit=2)
-            yield current[2].replace("\n", " ")
+            if int(current[1]) < 2000:
+                yield current[2].replace("\n", " ")

@@ -44,7 +44,7 @@ class CranfieldQry(Qrydb):
 class TrecCovidQry(Qrydb):
     __type__ = "trec-covid"
 
-    def __int__(self, id: int, text: str, metadata: dict):
+    def __init__(self, id: int, text: str, metadata: dict=None):
         Qrydb.__init__(self, id, text.lower())
         self.metadata = metadata
 

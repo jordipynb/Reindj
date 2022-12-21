@@ -100,7 +100,7 @@ class VectorIndexer(Indexer):
             for j, count in value:
                 tf_ij = count / max_frequency[j]
                 weight[j][i] = idf[i] * tf_ij
-        return weight, idf, list(dict_terms.keys())
+        return weight, idf, list(dict_terms.keys()), None
 
 
 class Latent_Semantic_Indexer(Indexer):
