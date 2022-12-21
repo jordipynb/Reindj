@@ -54,6 +54,7 @@ class CranfieldParser(Parser):
 
 
 class TrecCovidParser(Parser):
+    __type__ = "trec-covid"
 
     def __int__(self):
         self.__typedoc__: type[Document] = Document.search_document_type(TrecCovidParser.__type__)

@@ -57,5 +57,5 @@ class VaswaniTesterParser(TesterParser):
             temp = item.split("\n", maxsplit=2)
             qry = temp[1]
             docs = re.split(' ', temp[2].replace("\n", " ").replace("  ", " "))
-            result[qry] = list(filter(lambda x: not (x == '') and int(x) <= 2, docs))
+            result[qry] = list(filter(lambda x: not (x == ''), docs))
         return result

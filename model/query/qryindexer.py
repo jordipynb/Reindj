@@ -100,3 +100,31 @@ class Latent_Semantic_Indexer(QryIndexer):
         return vector
 
 
+class BooleanQryIndexer(QryIndexer):
+    __type__ = "boolean"
+
+    def __call__(self, qry: Qrydb, terms: dict[str, np.ndarray]) -> np.ndarray:
+        text = qry.text
+        return self.__extract_terms__(text)
+
+    def __extract_terms__(self, text: str) -> dict[str, int]:
+        separators = ("\n", "|", "\"", " ", "\\", "/", "{", "}", "[", "]", "(", ")", "`", "^", "&",
+                      "-", "+", "*", "!", "?", ".", ",", ";", ":", "\'", "#", "$", "@", "%", "~", "<", ">", "=")
+        is_relevant = lambda pos: pos == 'NOUN' or pos == 'ADJ' or pos == 'VERB'
+        stop_words: set[str] = set(stopwords.words('english'))
+        dict_terms: dict[str, int] = defaultdict(int)
+        terms_pos: dict[str, str] = defaultdict(str)
+        regular_exp = '|'.join(map(re.escape, separators))
+        text = re.split(regular_exp, text)
+        tokenize = list(filter("".__ne__, text))
+        for token in tokenize:
+            if not token in stop_words:
+                word_lemmatize = WordNetLemmatizer().lemmatize(token)
+                lemmatize = [word_lemmatize]
+                pos = terms_pos[word_lemmatize]
+                if pos == "":
+                    word, pos = pos_tag(lemmatize, tagset='universal')[0]
+                    terms_pos[word] = pos
+                if is_relevant(pos):
+                    dict_terms[word] = 1
+        return dict_terms

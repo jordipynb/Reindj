@@ -155,17 +155,16 @@ class Latent_Semantic_Indexer(Indexer):
         return T2, S2, DT2
 
     def __get_docs__(self, DT2: np.array):
-
         return [DT2[:, i] for i in range(DT2.shape[1])]
 
 
 class BooleanIndexer(Indexer):
     __type__ = "boolean"
 
-    def __call__(self, docs_bodies: list[str]) -> tuple[np.ndarray, np.ndarray, list[str]]:
-        dict_terms, max_frequency = self.__extract_terms__(docs_bodies)
+    def __call__(self, docs_bodies: list[str]) -> dict[str, np.ndarray]:
+        return self.__extract_terms__(docs_bodies)
 
-    def __extract_terms__(self, docs_bodies: list[str]) -> tuple[dict[str, dict[int, int]], np.ndarray]:
+    def __extract_terms__(self, docs_bodies: list[str]) -> dict[str, np.ndarray]:
         separators = ("\n", "|", "\"", " ", "\\", "/", "{", "}", "[", "]", "(", ")", "`", "^", "&",
                       "-", "+", "*", "!", "?", ".", ",", ";", ":", "\'", "#", "$", "@", "%", "~", "<", ">", "=")
         is_relevant = lambda pos: pos == 'NOUN' or pos == 'ADJ' or pos == 'VERB'
@@ -186,6 +185,6 @@ class BooleanIndexer(Indexer):
                         terms_pos[word] = pos
                     if is_relevant(pos):
                         cc = dict_terms[word]
-                        cc[i] = 1
+                        cc[i+1] = 1
                         dict_terms[word] = cc
         return dict_terms

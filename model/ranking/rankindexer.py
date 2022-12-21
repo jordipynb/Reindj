@@ -11,7 +11,7 @@ class RankIndexer(ABC):
 
     @abstractmethod
     def __call__(self, top: int, umbral: float, w_docterms: np.ndarray, w_queryterms: list[float], corpus: Corpus) -> \
-    list[Document]:
+            list[Document]:
         pass
 
     @classmethod
@@ -26,7 +26,7 @@ class VectorRankIndexer(RankIndexer):
     __type__ = "vector"
 
     def __call__(self, top: int, umbral: float, w_docterms: np.ndarray, w_queryterms: list[float], corpus: Corpus) -> \
-    list[Document]:
+            list[Document]:
         cos = cosine_similarity(w_docterms, w_queryterms.reshape(1, -1))
         doc_sim = []
         for i in range(len(corpus)):
@@ -43,7 +43,8 @@ class VectorRankIndexer(RankIndexer):
 class Latent_Semantic_Rank_Indexer(RankIndexer):
     __type__ = "latent_semantic"
 
-    def __call__(self, top: int, umbral: float, w_docterms: np.ndarray, w_queryterms: list[float], corpus: Corpus) -> list[Document]:
+    def __call__(self, top: int, umbral: float, w_docterms: np.ndarray, w_queryterms: list[float], corpus: Corpus) ->\
+            list[Document]:
         cos = cosine_similarity(w_docterms, w_queryterms.reshape(1, -1))
         doc_sim = []
         for i in range(len(corpus)):
@@ -55,3 +56,37 @@ class Latent_Semantic_Rank_Indexer(RankIndexer):
         if len(top_umbral) == 0: top_umbral.append(top_sim[0])
         top_umbral = list(map(lambda topumbral: topumbral[0], top_umbral))
         return top_umbral
+
+
+class BooleanRankIndexer(RankIndexer):
+    __type__ = "boolean"
+
+    def __call__(self, top: int, umbral: float, w_docterms: np.ndarray, w_queryterms: list[float], corpus: Corpus) -> \
+            list[Document]:
+        terms: list[np.ndarray] = []
+        for q_term in w_queryterms:
+            pos = w_docterms[q_term]
+            if self.__is_equal__(pos, np.zeros(len(corpus), dtype=int)):
+                return []
+            if len(terms) <= top:
+                terms.append(pos)
+
+        return self.__verify_docs__(terms, corpus)
+
+    def __verify_docs__(self, terms: list[np.ndarray], corpus: Corpus):
+        docs: list[Document] = []
+        for i in range (0, len(corpus)):
+            for j, term in terms:
+                if term[i] == 0:
+                    break
+                if term[i] == 1 and j == len(terms) - 1:
+                    docs.append(corpus.__getitem__(i))
+        return docs
+
+    def __is_equal__(self, array1: np.ndarray, array2: np.ndarray):
+        if len(array1) != len(array2):
+            return False
+        for i, obj in array1:
+            if array1[i] != array2[i]:
+                return False
+        return True
