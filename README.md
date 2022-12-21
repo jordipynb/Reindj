@@ -13,4 +13,4 @@ Para ejecutar el código debe tener instalado python, uvicorn, nltk y numpy
 ```
 > uvicorn main:app --reload
 ```
-Con respecto a los requerimientos se puede encontrar un ``` requirements.txt```. Cualquier editor de código o IDE ofrece las facilidades para satisfacer dichos requerimientos.
+Con respecto a los requerimientos se puede encontrar un ``` requirements.txt``` dentro del directorio principal del proyecto. Cualquier editor de código o IDE ofrece las facilidades para satisfacer dichos requerimientos.
