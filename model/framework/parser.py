@@ -56,19 +56,21 @@ class CranfieldParser(Parser):
 class TrecCovidParser(Parser):
     __type__ = "trec-covid"
 
-    def __int__(self):
+    def __init__(self):
         self.__typedoc__: type[Document] = Document.search_document_type(TrecCovidParser.__type__)
 
     def __call__(self, text: str) -> list[Document]:
         list_docs: list[Document] = []
-        db_path = Configuration.db_path(Configuration, _type="trec-covid")
+        # db_path = Configuration.db_path(Configuration, _type="trec-covid")
+        db_path = 'db/trec-covid/corpus.jsonl'
 
         with open(db_path, 'r') as json_file:
             json_list = list(json_file)
 
         for json_lines in json_list:
             doc = json.loads(json_lines)
-            list_docs.append(self.__typedoc__(doc['_id'], doc['title'], doc['text'], doc['metadata'], doc['pubmed_id']))
+            list_docs.append(self.__typedoc__(doc['_id'], doc['title'], doc['text'], doc['metadata']))
+        return list_docs
 
 
 class VaswaniParser(Parser):

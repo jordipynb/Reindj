@@ -8,7 +8,7 @@ class TesterParser(ABC):
     __type__ = "default"
 
     @abstractmethod
-    def __call__(self, qry_doc: list[str]) -> dict[str, list[str]]:
+    def __call__(self, qry_doc: list[str], docs=None) -> dict[str, list[str]]:
         pass
 
     @classmethod
@@ -22,7 +22,7 @@ class TesterParser(ABC):
 class CranfieldTesterParser(TesterParser):
     __type__ = "cranfield"
 
-    def __call__(self, path: str) -> dict[str, list[str]]:
+    def __call__(self, path: str, docs=None) -> dict[str, list[str]]:
         with open(path, "r", encoding='utf8') as qry_doc_path: qry_doc = qry_doc_path.readlines()
         result: defaultdict[str, list] = defaultdict(list)
         for rel in qry_doc:
@@ -34,7 +34,7 @@ class CranfieldTesterParser(TesterParser):
     class TrecCovidTesterParser(TesterParser):
         __type__ = "trec-covid"
 
-        def __call__(self, qry_doc: list[str]) -> dict[str, list[str]]:
+        def __call__(self, qry_doc: list[str], docs =None) -> dict[str, list[str]]:
             result: defaultdict[str, list] = defaultdict(list)
             qry_doc.pop(0)
             for rel in qry_doc:
@@ -47,7 +47,7 @@ class CranfieldTesterParser(TesterParser):
 class VaswaniTesterParser(TesterParser):
     __type__ = "vaswani"
 
-    def __call__(self, path: str) -> dict[str, list[str]]:
+    def __call__(self, path: str, docs=None) -> dict[str, list[str]]:
         with open(path, "r", encoding='utf8') as qry_doc_path: qry_doc = qry_doc_path.read()
         querys = qry_doc.split('/')
         querys.pop(len(querys) - 1)

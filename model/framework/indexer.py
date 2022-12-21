@@ -185,6 +185,6 @@ class BooleanIndexer(Indexer):
                         terms_pos[word] = pos
                     if is_relevant(pos):
                         cc = dict_terms[word]
-                        cc[i+1] = 1
+                        cc[i] = 1
                         dict_terms[word] = cc
-        return dict_terms
+        return dict_terms, None, None, None

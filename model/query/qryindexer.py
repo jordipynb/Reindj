@@ -103,7 +103,7 @@ class Latent_Semantic_Indexer(QryIndexer):
 class BooleanQryIndexer(QryIndexer):
     __type__ = "boolean"
 
-    def __call__(self, qry: Qrydb, terms: dict[str, np.ndarray]) -> np.ndarray:
+    def __call__(self, qry: Qrydb, terms: dict[str, np.ndarray], T, idf) -> np.ndarray:
         text = qry.text
         return self.__extract_terms__(text)
 

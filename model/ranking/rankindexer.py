@@ -86,7 +86,7 @@ class BooleanRankIndexer(RankIndexer):
     def __is_equal__(self, array1: np.ndarray, array2: np.ndarray):
         if len(array1) != len(array2):
             return False
-        for i, obj in array1:
+        for i in array1:
             if array1[i] != array2[i]:
                 return False
         return True

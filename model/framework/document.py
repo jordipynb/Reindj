@@ -34,11 +34,10 @@ class CranfieldDocument(Document):
 class TrecCovidDocument(Document):
     __type__ = "trec-covid"
 
-    def __int__(self, id: str, title: str, text: str, metadata: dict, pubmed_id: str):
+    def __init__(self, id: str, title: str, text: str, metadata: dict):
         Document.__init__(self, id, text.lower())
         self.title = title
         self.metadata = metadata
-        self.pubmed_id = pubmed_id
 
     def __call__(self): pass
 

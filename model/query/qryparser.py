@@ -67,7 +67,7 @@ class VaswaniQryParser(QryParser):
 class TrecCovidQryParser(QryParser):
     __type__ = "trec-covid"
 
-    def __int__(self):
+    def __init__(self):
         self.__typedoc__ = Qrydb.search_qry_type(TrecCovidQryParser.__type__)
 
     def __call__(self, text: str) -> list[Qrydb]:
