@@ -61,7 +61,7 @@ class TrecCovidParser(Parser):
 
     def __call__(self, text: str) -> list[Document]:
         list_docs: list[Document] = []
-        db_path = Configuration.db_path(_type="trec-covid")
+        db_path = Configuration.db_path(Configuration, _type="trec-covid")
 
         with open(db_path, 'r') as json_file:
             json_list = list(json_file)

@@ -53,7 +53,7 @@ class TrecCovidQry(Qrydb):
     def __eq__(self, other):
         if isinstance(other, TrecCovidQry):
             return self.id == other.id
-    raise TypeError("The \'other\' argument must be a trec-COVID Query")
+        raise TypeError("The \'other\' argument must be a trec-COVID Query")
 
 
 class VaswaniQry(Qrydb):
