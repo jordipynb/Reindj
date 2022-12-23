@@ -6,7 +6,7 @@ from model.tools import Precission, Recall, FMean, F1Mean
 import numpy as np
 
 
-class Reindj:
+class Freindj:
     def __init__(self, __typedb__: str, __typemodel__: str):
         self.__typedb__ = __typedb__
         self.__typemodel__ = __typemodel__
@@ -25,7 +25,7 @@ class Reindj:
                 qry = self.queries[self.queries.index(self.qry.__typeqry__(i, ""))]
                 docs_rec = list(map(lambda doc: doc.id, self.doc_query(qry.text)))
                 for i, metric in enumerate(metrics):
-                    results[i].append(metric(docs_rec, rel[qry.id]))
+                    results[i].append(metric(docs_rec, rel[str(qry.id)]))
         evaluation = {
             "P": np.mean(results[0]),
             "R": np.mean(results[1]),

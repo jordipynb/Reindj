@@ -1,9 +1,9 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from reindj import Reindj
+from reindj import Freindj
 
 app = FastAPI()
-system = Reindj("cranfield", "vector")
+system = Freindj("cranfield", "vector")
 
 # NEW
 app.add_middleware(
@@ -17,7 +17,7 @@ app.add_middleware(
 
 @app.get("/")
 def home():
-    return "Welcome to Reindj! To view an evaluation navigate to /evaluate. To search a query navigate to /search?qry=<msg>."
+    return "Welcome to Freindj! To view an evaluation navigate to /evaluate. To search a query navigate to /search?qry=<msg>."
 
 
 @app.get("/evaluate")
@@ -31,9 +31,4 @@ def search(qry: str):
         if qry == "": return []
         return system.doc_query(qry)
     except Exception:
-        raise HTTPException(status_code=501, detail="Sorry! Unexpected error in execution of Reindj System.")
-
-
-@app.get("/terms")
-def terms():
-    return system.framework.terms
+        raise HTTPException(status_code=501, detail="Sorry! Unexpected error in execution of Freindj System.")
