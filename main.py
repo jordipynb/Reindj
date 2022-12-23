@@ -37,5 +37,3 @@ def search(qry: str):
 @app.get("/terms")
 def terms():
     return system.framework.terms
-
-# evaluate()

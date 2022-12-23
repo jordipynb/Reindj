@@ -2,8 +2,20 @@
 # Edit at https://www.toptal.com/developers/gitignore?templates=python,pycharm,visualstudio,visualstudiocode,vim,virtualenv
 
 ### MY STUFF###
+db/
+__pycache__/
 db/*
 __pycache__/*
+model/framework/__pycache__/
+model/framework/__pycache__/*
+model/query/__pycache__/
+model/query/__pycache__/*
+model/ranking/__pycache__/
+model/ranking/__pycache__/*
+model/tester/__pycache__/
+model/tester/__pycache__/*
+model/tools/__pycache__/
+model/tools/__pycache__/*
 
 ### PyCharm ###
 # Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm, CLion, Android Studio, WebStorm and Rider
@@ -123,11 +135,6 @@ fabric.properties
 __pycache__/
 *.py[cod]
 *$py.class
-model/framework/__pycache__/*
-model/query/__pycache__/*
-model/ranking/__pycache__/*
-model/tester/__pycache__/*
-model/tools/__pycache__/*
 
 # C extensions
 *.so
@@ -146,6 +153,10 @@ parts/
 sdist/
 var/
 wheels/
+<<<<<<< HEAD
+pip-wheel-metadata/
+=======
+>>>>>>> c79b45f (chore: Add gitignore)
 share/python-wheels/
 *.egg-info/
 .installed.cfg
@@ -175,7 +186,10 @@ coverage.xml
 *.py,cover
 .hypothesis/
 .pytest_cache/
+<<<<<<< HEAD
+=======
 cover/
+>>>>>>> c79b45f (chore: Add gitignore)
 
 # Translations
 *.mo
@@ -198,7 +212,10 @@ instance/
 docs/_build/
 
 # PyBuilder
+<<<<<<< HEAD
+=======
 .pybuilder/
+>>>>>>> c79b45f (chore: Add gitignore)
 target/
 
 # Jupyter Notebook
@@ -209,9 +226,14 @@ profile_default/
 ipython_config.py
 
 # pyenv
+# pyenv
+<<<<<<< HEAD
+.python-version
+=======
 #   For a library or package, you might want to ignore these files since the code is
 #   intended to run in multiple environments; otherwise, check them in:
 # .python-version
+>>>>>>> c79b45f (chore: Add gitignore)
 
 # pipenv
 #   According to pypa/pipenv#598, it is recommended to include Pipfile.lock in version control.
@@ -220,6 +242,9 @@ ipython_config.py
 #   install all needed dependencies.
 #Pipfile.lock
 
+<<<<<<< HEAD
+# PEP 582; used by e.g. github.com/David-OConnor/pyflow
+=======
 # poetry
 #   Similar to Pipfile.lock, it is generally recommended to include poetry.lock in version control.
 #   This is especially recommended for binary packages to ensure reproducibility, and is more
@@ -236,6 +261,7 @@ ipython_config.py
 .pdm.toml
 
 # PEP 582; used by e.g. github.com/David-OConnor/pyflow and github.com/pdm-project/pdm
+>>>>>>> c79b45f (chore: Add gitignore)
 __pypackages__/
 
 # Celery stuff
@@ -271,6 +297,8 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+<<<<<<< HEAD
+=======
 
 # pytype static type analyzer
 .pytype/
