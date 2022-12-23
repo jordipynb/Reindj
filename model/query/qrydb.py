@@ -44,15 +44,14 @@ class CranfieldQry(Qrydb):
 class TrecCovidQry(Qrydb):
     __type__ = "trec-covid"
 
-    def __init__(self, id: int, text: str, metadata: dict=None):
+    def __init__(self, id: int, text: str):
         Qrydb.__init__(self, id, text.lower())
-        self.metadata = metadata
 
     def __call__(self): pass
 
     def __eq__(self, other):
         if isinstance(other, TrecCovidQry):
-            return self.id == other.id
+            return self.id == int(other.id)
         raise TypeError("The \'other\' argument must be a trec-COVID Query")
 
 

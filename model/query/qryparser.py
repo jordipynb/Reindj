@@ -76,5 +76,5 @@ class TrecCovidQryParser(QryParser):
         qry_list: list[Qrydb] = []
         for qry in qries:
             qry_dict = json.loads(qry)
-            qry_list.append(self.__typedoc__(int(qry_dict['_id']), qry_dict['text'], qry_dict['metadata']))
-            return qry_list
+            qry_list.append(self.__typedoc__(int(qry_dict['_id']), qry_dict['text']))
+        return qry_list
