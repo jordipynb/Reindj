@@ -1,16 +1,17 @@
 # Freindj
-Este proyecto tiene el objetivo de crear un Motor de Búsqueda con un Sistema de Recuperación de Información.  
-Se deben crear 3 modelos de recuperación de información en función de 3 colecciones de documentos y establecer las métricas pertinentes para evaluar cada modelo.  
+This project aims to create a Search Engine with an Information Retrieval System.  
+Three information retrieval models must be created based on three document collections and the pertinent metrics must be established to evaluate each model. 
   
-| Autor    | Modelo Implementado | Colección   | Estado      | 
-|----------|---------------------|-------------|-------------|
-| Jordan   | Vectorial           | Cranfield   | Finalizado  |
-| Felix    | Booleano            | TREC-Covid  | Finalizado  |
-| Dianelys | Semántica Latente   | Vaswani     | Finalizado  |
+| Author    | Implemented Model | Corpus     | State   | 
+|---------- |-------------------|------------|---------|
+| Jordan    | Vector            | Cranfield  | Done    |
+| Felix     | Boolean           | TREC-Covid | Done    |
+| Dianelys  | Latent Semantics  | Vaswani    | Done    |
                                       
 
-Para ejecutar el código debe tener instalado python, uvicorn, nltk y numpy
+To run the code: 
 ```
-> uvicorn main:app --reload
+$ uvicorn main:app --reload
 ```
-Con respecto a los requerimientos se puede encontrar un ```requirements.txt``` dentro del directorio principal del proyecto. Cualquier editor de código o IDE ofrece las facilidades para satisfacer dichos requerimientos.
+You must have python, uvicorn, nltk and numpy installed, check the requirements for more details.  
+Requirements can be found in a ```requirements.txt``` inside the main project directory. Any code editor or IDE offers the facilities to satisfy such requirements.
